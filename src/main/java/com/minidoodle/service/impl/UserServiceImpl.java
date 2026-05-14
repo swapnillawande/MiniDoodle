@@ -1,6 +1,7 @@
 package com.minidoodle.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserDto getUserById(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+		AppUser user = userRepository.findById(userId).orElse(null);
+		return modelMapper.map(user, UserDto.class);
 	}
 
 	@Override
