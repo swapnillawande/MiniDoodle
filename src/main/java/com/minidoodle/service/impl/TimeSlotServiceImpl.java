@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.minidoodle.dto.TimeSlotDto;
+import com.minidoodle.entity.AppUser;
+import com.minidoodle.entity.Meeting;
 import com.minidoodle.entity.TimeSlot;
 import com.minidoodle.entity.enums.SlotStatus;
 import com.minidoodle.exception.ResourceNotFoundException;
+import com.minidoodle.repository.MeetingRepository;
 import com.minidoodle.repository.TimeSlotRepository;
+import com.minidoodle.repository.UserRepository;
 import com.minidoodle.service.TimeSlotService;
 
 @Service
@@ -18,6 +22,12 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	@Autowired
 	private TimeSlotRepository timeSlotRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private MeetingRepository meetingRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -60,8 +70,11 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 		timeSlot.setStartTime(timeSlotDto.getStartTime());
 		timeSlot.setEndTime(timeSlotDto.getEndTime());
 		timeSlot.setStatus(timeSlotDto.getStatus());
-		timeSlot.setOwner(timeSlotDto.getOwner());
-		timeSlot.setMeeting(timeSlotDto.getMeeting());
+		AppUser owner = userRepository.findById(timeSlotDto.getOwnerId())
+		        .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
+
+		Meeting meeting = meetingRepository.findById(timeSlotDto.getMeetingId())
+		        .orElseThrow(() -> new ResourceNotFoundException("Meeting not found"));
 		
 		TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlot);
 		

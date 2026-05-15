@@ -18,23 +18,23 @@ public class TimeSlotDto {
 
     private SlotStatus status;
 
-    private AppUser owner;
-
-    private Meeting meeting;
+    private Long ownerId;
+    
+    private Long meetingId;
 
 	public TimeSlotDto() {
 
 	}
 
-	public TimeSlotDto(Long id, LocalDateTime startTime, LocalDateTime endTime, SlotStatus status, AppUser owner,
-			Meeting meeting) {
+	public TimeSlotDto(Long id, LocalDateTime startTime, LocalDateTime endTime, SlotStatus status, Long ownerId,
+			Long meetingId) {
 		super();
 		this.id = id;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.status = status;
-		this.owner = owner;
-		this.meeting = meeting;
+		this.ownerId = ownerId;
+		this.meetingId = meetingId;
 	}
 
 	public Long getId() {
@@ -69,20 +69,20 @@ public class TimeSlotDto {
 		this.status = status;
 	}
 
-	public AppUser getOwner() {
-		return owner;
+	public Long getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(AppUser owner) {
-		this.owner = owner;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
-	public Meeting getMeeting() {
-		return meeting;
+	public Long getMeetingId() {
+		return meetingId;
 	}
 
-	public void setMeeting(Meeting meeting) {
-		this.meeting = meeting;
+	public void setMeetingId(Long meetingId) {
+		this.meetingId = meetingId;
 	}
     
 	
