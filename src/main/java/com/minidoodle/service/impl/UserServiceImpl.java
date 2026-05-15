@@ -11,6 +11,7 @@ import com.minidoodle.dto.UserDto;
 import com.minidoodle.entity.AppUser;
 import com.minidoodle.repository.UserRepository;
 import com.minidoodle.service.UserService;
+import com.minidoodle.service.exception.ResourceNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -58,6 +59,20 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void deleteAllUsers() {
 		userRepository.deleteAll();		
+	}
+
+	@Override
+	public UserDto updateUserById(Long userId, UserDto user) {
+
+	    AppUser appUser = userRepository.findById(userId)
+	            .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+
+	    appUser.setUsername(user.getUsername());
+	    appUser.setEmail(user.getEmail());
+
+	    AppUser savedUser = userRepository.save(appUser);
+
+	    return modelMapper.map(savedUser, UserDto.class);
 	}
 
 }
