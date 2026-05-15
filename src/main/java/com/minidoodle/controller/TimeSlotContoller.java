@@ -65,6 +65,14 @@ public class TimeSlotContoller {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@DeleteMapping("")
+	private ResponseEntity<Void> deleteAllTimeSlots(){
+		
+		timeSlotService.deleteAllTimeSlots();
+		
+		return ResponseEntity.noContent().build();
+	}
+	
 	@PutMapping("/{slotId}/status")
 	public ResponseEntity<TimeSlotDto> updateSlotStatus(
 	        @PathVariable Long slotId,
@@ -75,6 +83,7 @@ public class TimeSlotContoller {
 
 	    return ResponseEntity.ok(updatedSlot);
 	}
+	
 	
 	
 }

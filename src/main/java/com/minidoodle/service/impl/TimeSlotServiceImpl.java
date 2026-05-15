@@ -91,6 +91,15 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 	    return modelMapper.map(updatedSlot, TimeSlotDto.class);
 	}
 
+	@Override
+	public void deleteAllTimeSlots() {
+		
+		timeSlotRepository.deleteAll();
+		
+	}
 
+
+	
+	
 
 }
