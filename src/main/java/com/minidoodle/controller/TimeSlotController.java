@@ -20,13 +20,13 @@ import com.minidoodle.service.TimeSlotService;
 
 @RestController
 @RequestMapping("/time-slots")
-public class TimeSlotContoller {
+public class TimeSlotController {
 
 	@Autowired
 	private TimeSlotService timeSlotService;
 	
 	@PostMapping("")
-	private ResponseEntity<TimeSlotDto> addTimeSlot(@RequestBody TimeSlotDto timeSlotDto){
+	public ResponseEntity<TimeSlotDto> addTimeSlot(@RequestBody TimeSlotDto timeSlotDto){
 		
 		TimeSlotDto addedTimeSlot = timeSlotService.addSlot(timeSlotDto);
 		
@@ -34,7 +34,7 @@ public class TimeSlotContoller {
 	}
 	
 	@GetMapping("")
-	private ResponseEntity<List<TimeSlotDto>> getAllTimeSlot(){
+	public ResponseEntity<List<TimeSlotDto>> getAllTimeSlot(){
 		
 		List<TimeSlotDto> allSlots = timeSlotService.getAllSlots();
 		return ResponseEntity.ok(allSlots);
@@ -42,14 +42,14 @@ public class TimeSlotContoller {
 	}
 	
 	@GetMapping("/{slotId}")
-	private ResponseEntity<TimeSlotDto> getTimeSlotById(@PathVariable("slotId") Long slotId){
+	public ResponseEntity<TimeSlotDto> getTimeSlotById(@PathVariable("slotId") Long slotId){
 		
 		return ResponseEntity.ok(timeSlotService.getSlotById(slotId));
 	}
 	
 	
 	@PutMapping("/{slotId}")
-	private ResponseEntity<TimeSlotDto> updateTimeSlotById(
+	public ResponseEntity<TimeSlotDto> updateTimeSlotById(
 			@PathVariable("slotId") Long slotId,
 			@RequestBody TimeSlotDto timeSlotDto
 			){
@@ -58,7 +58,7 @@ public class TimeSlotContoller {
 	}
 	
 	@DeleteMapping("/{slotId}")
-	private ResponseEntity<Void> deleteTimeSlotById(@PathVariable("slotId") Long slotId){
+	public ResponseEntity<Void> deleteTimeSlotById(@PathVariable("slotId") Long slotId){
 		
 		timeSlotService.deleteSlotById(slotId);
 		
@@ -66,7 +66,7 @@ public class TimeSlotContoller {
 	}
 	
 	@DeleteMapping("")
-	private ResponseEntity<Void> deleteAllTimeSlots(){
+	public ResponseEntity<Void> deleteAllTimeSlots(){
 		
 		timeSlotService.deleteAllTimeSlots();
 		
