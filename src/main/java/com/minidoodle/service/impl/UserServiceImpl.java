@@ -1,7 +1,6 @@
 package com.minidoodle.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,14 @@ import com.minidoodle.repository.UserRepository;
 import com.minidoodle.service.UserService;
 import com.minidoodle.exception.ResourceNotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UserServiceImpl implements UserService{
 
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -25,6 +29,8 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserDto> getAllUsers() {
 
+	    logger.info("Getting all users..");
+		
 	    List<AppUser> users = userRepository.findAll();
 
 	    return users.stream()
@@ -34,12 +40,18 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserDto getUserById(Long userId) {
+		
+	    logger.info("Getting user with ID: "+ userId);
+		
 		AppUser user = userRepository.findById(userId).orElse(null);
+		
 		return modelMapper.map(user, UserDto.class);
 	}
 
 	@Override
 	public UserDto addUser(UserDto userDto) {
+		
+	    logger.info("Adding new user with email: "+ userDto.getEmail());
 		
 		AppUser user = new AppUser();
 		user.setUsername(userDto.getUsername());
@@ -47,31 +59,48 @@ public class UserServiceImpl implements UserService{
 		
 		AppUser savedUser = userRepository.save(user);
 		
+	    logger.info("User added successfully with ID: "+ savedUser.getId());
+
+		
 		return modelMapper.map(savedUser, UserDto.class);	
 	}
 
 	@Override
 	public void deleteUserById(Long userId) {
+		
+	    logger.warn("Deleting user with ID: "+ userId);
+
 		userRepository.deleteById(userId);
 		
 	}
 
 	@Override
 	public void deleteAllUsers() {
+		
+	    logger.warn("Deleting all users..");
+		
 		userRepository.deleteAll();		
 	}
 
 	@Override
 	public UserDto updateUserById(Long userId, UserDto user) {
 
+	    logger.info("Updating user with ID: "+ userId);
+		
 	    AppUser appUser = userRepository.findById(userId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
+	            .orElseThrow(() -> {
+	                logger.error("User not found with ID: "+ userId);
+	                return new ResourceNotFoundException(
+	                        "User not found with ID: " + userId);
+	            });
 
 	    appUser.setUsername(user.getUsername());
 	    appUser.setEmail(user.getEmail());
 
 	    AppUser savedUser = userRepository.save(appUser);
 
+	    logger.info("User updated successfully with ID: "+ savedUser.getId());
+	    
 	    return modelMapper.map(savedUser, UserDto.class);
 	}
 
