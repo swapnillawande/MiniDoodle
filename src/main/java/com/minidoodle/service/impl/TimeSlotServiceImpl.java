@@ -70,7 +70,10 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	@Override
 	public void deleteSlotById(Long slotId) {
-		// TODO Auto-generated method stub
+		TimeSlot timeSlot = timeSlotRepository.findById(slotId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
+
+		timeSlotRepository.deleteById(slotId);
 		
 	}
 
