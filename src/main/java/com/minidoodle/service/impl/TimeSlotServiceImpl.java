@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.minidoodle.dto.TimeSlotDto;
 import com.minidoodle.entity.TimeSlot;
 import com.minidoodle.entity.enums.SlotStatus;
+import com.minidoodle.exception.ResourceNotFoundException;
 import com.minidoodle.repository.TimeSlotRepository;
 import com.minidoodle.service.TimeSlotService;
 
@@ -33,8 +34,11 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	@Override
 	public TimeSlotDto getSlotById(Long slotId) {
+		TimeSlot timeSlot = timeSlotRepository.findById(slotId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
+
 		
-		return null;
+		return modelMapper.map(timeSlot, TimeSlotDto.class);
 	}
 
 	@Override
@@ -49,8 +53,19 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	@Override
 	public TimeSlotDto updateSlotById(Long slotId, TimeSlotDto timeSlotDto) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		TimeSlot timeSlot = timeSlotRepository.findById(slotId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Slot not found with ID: " + slotId));
+
+		timeSlot.setStartTime(timeSlotDto.getStartTime());
+		timeSlot.setEndTime(timeSlotDto.getEndTime());
+		timeSlot.setStatus(timeSlotDto.getStatus());
+		timeSlot.setOwner(timeSlotDto.getOwner());
+		timeSlot.setMeeting(timeSlotDto.getMeeting());
+		
+		TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlot);
+		
+		return modelMapper.map(savedTimeSlot, TimeSlotDto.class);
 	}
 
 	@Override
