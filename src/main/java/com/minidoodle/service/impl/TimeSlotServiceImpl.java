@@ -79,8 +79,16 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	@Override
 	public TimeSlotDto updateSlotStatus(Long slotId, SlotStatus status) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    TimeSlot timeSlot = timeSlotRepository.findById(slotId)
+	            .orElseThrow(() -> new ResourceNotFoundException(
+	                    "Time slot not found with ID: " + slotId));
+
+	    timeSlot.setStatus(status);
+
+	    TimeSlot updatedSlot = timeSlotRepository.save(timeSlot);
+
+	    return modelMapper.map(updatedSlot, TimeSlotDto.class);
 	}
 
 

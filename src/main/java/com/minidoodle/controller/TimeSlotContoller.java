@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.minidoodle.dto.TimeSlotDto;
+import com.minidoodle.entity.enums.SlotStatus;
 import com.minidoodle.service.TimeSlotService;
 
 @RestController
@@ -63,7 +65,16 @@ public class TimeSlotContoller {
 		return ResponseEntity.noContent().build();
 	}
 	
-	
+	@PutMapping("/{slotId}/status")
+	public ResponseEntity<TimeSlotDto> updateSlotStatus(
+	        @PathVariable Long slotId,
+	        @RequestParam SlotStatus status) {
+
+	    TimeSlotDto updatedSlot =
+	            timeSlotService.updateSlotStatus(slotId, status);
+
+	    return ResponseEntity.ok(updatedSlot);
+	}
 	
 	
 }
