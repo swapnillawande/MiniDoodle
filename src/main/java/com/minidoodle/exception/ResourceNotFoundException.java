@@ -1,4 +1,4 @@
-package com.minidoodle.service.exception;
+package com.minidoodle.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

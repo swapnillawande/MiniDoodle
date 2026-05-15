@@ -11,7 +11,7 @@ import com.minidoodle.dto.UserDto;
 import com.minidoodle.entity.AppUser;
 import com.minidoodle.repository.UserRepository;
 import com.minidoodle.service.UserService;
-import com.minidoodle.service.exception.ResourceNotFoundException;
+import com.minidoodle.exception.ResourceNotFoundException;
 
 @Service
 public class UserServiceImpl implements UserService{
