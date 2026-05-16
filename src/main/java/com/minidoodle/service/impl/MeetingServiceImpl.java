@@ -44,8 +44,16 @@ public class MeetingServiceImpl implements MeetingService{
 
 	@Override
 	public MeetingDto getMeetingById(Long meetingId) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    logger.info("Getting meeting with ID: "+ meetingId);
+
+	    Meeting meeting = meetingRepository.findById(meetingId)
+	            .orElseThrow(() -> {
+	                logger.warn("Meeting not found with ID: "+ meetingId);
+	                return new ResourceNotFoundException("Meeting not found with ID: " + meetingId);
+	            });
+
+	    return convertToDto(meeting);
 	}
 
 	@Override
@@ -88,8 +96,6 @@ public class MeetingServiceImpl implements MeetingService{
 	    Meeting savedMeeting = meetingRepository.save(meeting);
 
 	    logger.info("Meeting added with ID: "+savedMeeting.getId());
-	    logger.info("Meeting added with ID details: "+meeting.toString());
-
 	    
 	    return convertToDto(savedMeeting);
 	}
