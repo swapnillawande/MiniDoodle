@@ -12,8 +12,9 @@ public interface MeetingService {
 
     MeetingDto addMeeting(MeetingDto meetingDto);
 
-    MeetingDto updateMeetingById(Long meetingId,
-                                 MeetingDto meetingDto);
+    MeetingDto updateMeetingById(Long meetingId, MeetingDto meetingDto);
+    
+    MeetingDto bookSlot(Long slotId, MeetingDto meetingDto);
 
     void deleteMeetingById(Long meetingId);
 

@@ -52,6 +52,17 @@ public class MeetingController {
 		return ResponseEntity.ok(meetingService.addMeeting(meetingDto));
 	}
 	
+	@PostMapping("/book-slot/{slotId}")
+	public ResponseEntity<MeetingDto> bookSlot(@PathVariable("slotId") Long slotId, @RequestBody MeetingDto meetingDto) {
+
+	    logger.info("POST BOOK SLOT API CALLED");
+
+	    MeetingDto bookedMeeting = meetingService.bookSlot(slotId, meetingDto);
+
+	    return ResponseEntity.ok(bookedMeeting);
+	}
+	
+	
 	@PutMapping("/updateMeeting/{meetingId}")
 	public ResponseEntity<MeetingDto> updateMeetingById(@PathVariable("meetingId") Long meetingId, @RequestBody MeetingDto meetingDto) {
 		logger.info("UPDATE MEETING BY ID API CALLED");
@@ -78,6 +89,7 @@ public class MeetingController {
 
 	    return ResponseEntity.noContent().build();
 	}
+	
 	
 	
 }

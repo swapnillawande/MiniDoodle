@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import com.minidoodle.dto.MeetingDto;
 import com.minidoodle.entity.AppUser;
 import com.minidoodle.entity.Meeting;
+import com.minidoodle.entity.TimeSlot;
+import com.minidoodle.entity.enums.SlotStatus;
 import com.minidoodle.exception.ResourceNotFoundException;
 import com.minidoodle.repository.MeetingRepository;
+import com.minidoodle.repository.TimeSlotRepository;
 import com.minidoodle.repository.UserRepository;
 import com.minidoodle.service.MeetingService;
 
@@ -28,6 +31,9 @@ public class MeetingServiceImpl implements MeetingService{
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private TimeSlotRepository timeSlotRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;
@@ -189,6 +195,61 @@ public class MeetingServiceImpl implements MeetingService{
 	    }
 
 	    return dto;
+	}
+
+	@Override
+	public MeetingDto bookSlot(Long slotId, MeetingDto meetingDto) {
+
+	    logger.info("Booking slot with ID: " + slotId);
+
+	    TimeSlot slot = timeSlotRepository.findById(slotId)
+	            .orElseThrow(() -> {
+	            	
+	            	logger.error("Slot not found with ID: ",slotId);
+	            	return new ResourceNotFoundException("Slot not found");
+	            });
+
+	    if (slot.getStatus() != SlotStatus.FREE) {
+	    	logger.error("Slot not available for booking..");
+	        throw new RuntimeException("Slot not available for booking..");
+	    }
+
+	    
+	    AppUser organizer = userRepository.findById(meetingDto.getOrganizerId())
+	            .orElseThrow(() -> {
+	            	logger.info("Organizer not found with ID: "+ meetingDto.getOrganizerId());
+	            	return new ResourceNotFoundException("Organizer not found");
+	            });
+
+	    
+	    List<AppUser> participants = meetingDto.getParticipantIds().stream()
+	            .map(userId -> userRepository.findById(userId)
+	                    .orElseThrow(() -> {
+	                    	logger.info("Participant not found with ID: "+ userId);
+	                    	
+	                    	return new ResourceNotFoundException("Participant not found");
+	                    }))
+	            .collect(Collectors.toList());
+
+	    Meeting meeting = new Meeting();
+
+	    meeting.setTitle(meetingDto.getTitle());
+	    meeting.setDescription(meetingDto.getDescription());
+	    meeting.setStartTime(slot.getStartTime());
+	    meeting.setEndTime(slot.getEndTime());
+	    meeting.setOrganizer(organizer);
+	    meeting.setParticipants(participants);
+
+	    Meeting savedMeeting = meetingRepository.save(meeting);
+
+	    slot.setStatus(SlotStatus.BUSY);
+	    slot.setMeeting(savedMeeting);
+
+	    timeSlotRepository.save(slot);
+
+	    logger.info("Slot booked successfully..");
+
+	    return convertToDto(savedMeeting);
 	}
 
 }
