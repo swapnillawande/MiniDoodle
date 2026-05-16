@@ -65,19 +65,39 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	    logger.info("Creating new time slot");
 
+	    if (timeSlotDto.getStartTime().isAfter(timeSlotDto.getEndTime())) {
+	        logger.error("Start time cannot be after end time");
+	        throw new RuntimeException("Start time cannot be after end time");
+	    }
+	    
 	    AppUser owner = userRepository.findById(timeSlotDto.getOwnerId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Owner not found"));
 
-	    Meeting meeting = meetingRepository.findById(timeSlotDto.getMeetingId())
-	            .orElseThrow(() -> new ResourceNotFoundException("Meeting not found"));
 
 	    TimeSlot timeSlot = new TimeSlot();
 
 	    timeSlot.setStartTime(timeSlotDto.getStartTime());
 	    timeSlot.setEndTime(timeSlotDto.getEndTime());
-	    timeSlot.setStatus(timeSlotDto.getStatus());
+	    
+	    if (timeSlotDto.getStatus() != null) {
+	        timeSlot.setStatus(timeSlotDto.getStatus());
+	    } else {
+	        timeSlot.setStatus(SlotStatus.FREE);
+	    }
+	    
 	    timeSlot.setOwner(owner);
-	    timeSlot.setMeeting(meeting);
+	    
+	    if (timeSlotDto.getMeetingId() != null) {
+
+	        Meeting meeting = meetingRepository.findById(timeSlotDto.getMeetingId())
+	                .orElseThrow(() ->{
+	                	logger.error("Meeting not found with ID: "+timeSlotDto.getMeetingId());
+	                	return new ResourceNotFoundException("Meeting not found");
+	                }
+	                        );
+
+	        timeSlot.setMeeting(meeting);
+	    }
 
 	    TimeSlot savedSlot = timeSlotRepository.save(timeSlot);
 
