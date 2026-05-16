@@ -102,8 +102,47 @@ public class MeetingServiceImpl implements MeetingService{
 
 	@Override
 	public MeetingDto updateMeetingById(Long meetingId, MeetingDto meetingDto) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    logger.info("Updating meeting with ID: "+ meetingId);
+
+	    Meeting meeting = meetingRepository.findById(meetingId)
+	            .orElseThrow(() -> {
+	                logger.warn("Meeting not found with ID: "+ meetingId);
+	                
+	                return new ResourceNotFoundException("Meeting not found with ID: " + meetingId);
+	            });
+
+	    meeting.setTitle(meetingDto.getTitle());
+	    meeting.setDescription(meetingDto.getDescription());
+	    meeting.setStartTime(meetingDto.getStartTime());
+	    meeting.setEndTime(meetingDto.getEndTime());
+
+	    AppUser organizer = userRepository.findById(meetingDto.getOrganizerId())
+	            .orElseThrow(() -> {
+	                logger.warn("Organizer not found with ID: "+ meetingDto.getOrganizerId());
+
+	                return new ResourceNotFoundException("Organizer not found");
+	            });
+
+	    meeting.setOrganizer(organizer);
+
+	    List<AppUser> participants = meetingDto.getParticipantIds().stream()
+	                    .map(userId ->
+	                            userRepository.findById(userId)
+	                            .orElseThrow(() -> {
+	                                        logger.warn("Participant not found with ID: "+userId);
+
+	                                        return new ResourceNotFoundException("Participant not found");
+	                             }))
+	                    .collect(Collectors.toList());
+
+	    meeting.setParticipants(participants);
+
+	    Meeting updatedMeeting = meetingRepository.save(meeting);
+
+	    logger.info("Meeting updated successfully with ID: "+ updatedMeeting.getId());
+
+	    return convertToDto(updatedMeeting);
 	}
 
 	@Override
