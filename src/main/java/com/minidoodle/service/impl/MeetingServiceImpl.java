@@ -147,8 +147,17 @@ public class MeetingServiceImpl implements MeetingService{
 
 	@Override
 	public void deleteMeetingById(Long meetingId) {
-		// TODO Auto-generated method stub
-		
+
+	    logger.warn("Deleting meeting with ID: " + meetingId);
+
+	    Meeting meeting = meetingRepository.findById(meetingId)
+	            .orElseThrow(() -> {
+	                logger.warn("Meeting not found with ID: " + meetingId);
+	                
+	                return new ResourceNotFoundException("Meeting not found with ID: " + meetingId);
+	            });
+
+	    meetingRepository.delete(meeting);
 	}
 
 	@Override

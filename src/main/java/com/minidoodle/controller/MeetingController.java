@@ -70,6 +70,15 @@ public class MeetingController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@DeleteMapping("/{meetingId}")
+	public ResponseEntity<Void> deleteMeetingById(@PathVariable("meetingId") Long meetingId) {
+	    logger.info("DELETE MEETING BY ID API CALLED");
+
+	    meetingService.deleteMeetingById(meetingId);
+
+	    return ResponseEntity.noContent().build();
+	}
+	
 	
 }
 
