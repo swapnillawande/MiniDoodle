@@ -128,14 +128,13 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 		        	return new ResourceNotFoundException("Owner not found");
 		        });
 
-		Meeting meeting = meetingRepository.findById(timeSlotDto.getMeetingId())
-		        .orElseThrow(() -> {
-	                logger.error("Meeting not found with ID: "+ timeSlotDto.getMeetingId());
-		        	return new ResourceNotFoundException("Meeting not found");
-		        });
+		if (timeSlotDto.getMeetingId() != null) {
+		    Meeting meeting = meetingRepository.findById(timeSlotDto.getMeetingId())
+		            .orElseThrow(() -> new ResourceNotFoundException("Meeting not found"));
+		    timeSlot.setMeeting(meeting);
+		}
 		
 		timeSlot.setOwner(owner);
-		timeSlot.setMeeting(meeting);
 		
 		TimeSlot savedTimeSlot = timeSlotRepository.save(timeSlot);
 		
