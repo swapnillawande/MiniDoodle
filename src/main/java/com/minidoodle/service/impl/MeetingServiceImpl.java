@@ -153,7 +153,9 @@ public class MeetingServiceImpl implements MeetingService{
 
 	@Override
 	public void deleteAllMeetings() {
-		// TODO Auto-generated method stub
+		logger.warn("Deleting all meetings");
+		
+		meetingRepository.deleteAll();
 		
 	}
 	

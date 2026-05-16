@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,10 +54,20 @@ public class MeetingController {
 	
 	@PutMapping("/updateMeeting/{meetingId}")
 	public ResponseEntity<MeetingDto> updateMeetingById(@PathVariable("meetingId") Long meetingId, @RequestBody MeetingDto meetingDto) {
+		logger.info("UPDATE MEETING BY ID API CALLED");
 
 	    MeetingDto updatedMeeting = meetingService.updateMeetingById(meetingId, meetingDto);
 
 	    return ResponseEntity.ok(updatedMeeting);
+	}
+	
+	@DeleteMapping("")
+	public ResponseEntity<Void> deleteAllMeetings(){
+		logger.info("DELETE ALL MEETING API CALLED");
+
+		meetingService.deleteAllMeetings();
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	
