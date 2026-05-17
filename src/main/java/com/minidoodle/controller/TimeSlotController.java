@@ -31,7 +31,7 @@ public class TimeSlotController {
 	@Autowired
 	private TimeSlotService timeSlotService;
 	
-	@PostMapping("")
+	@PostMapping("/add-time-slot")
 	public ResponseEntity<TimeSlotDto> addTimeSlot(@RequestBody TimeSlotDto timeSlotDto){
 		logger.info("POST TIME SLOT API CALLED");
 		
@@ -54,6 +54,13 @@ public class TimeSlotController {
 		logger.info("GET TIME SLOT BY ID API CALLED");
 
 		return ResponseEntity.ok(timeSlotService.getSlotById(slotId));
+	}
+	
+	@GetMapping("/availability")
+	public ResponseEntity<List<TimeSlotDto>> getAllAvailableTimeSlots() {
+	    logger.info("GET AVAILABLE SLOTS API CALLED");
+
+	    return ResponseEntity.ok(timeSlotService.getAllAvailableTimeSlots());
 	}
 	
 	

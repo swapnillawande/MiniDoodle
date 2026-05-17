@@ -20,5 +20,7 @@ public interface TimeSlotService {
 
 	TimeSlotDto updateSlotStatus(Long slotId, SlotStatus status);
 	
+	List<TimeSlotDto> getAllAvailableTimeSlots();
+	
 	void deleteAllTimeSlots();
 }

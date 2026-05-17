@@ -40,7 +40,7 @@ public class UserController {
 		return ResponseEntity.ok(userService.getUserById(userId));
 	}
 	
-	@PostMapping("")
+	@PostMapping("/add-user")
 	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto){
 		logger.info("POST USER API CALLED");
 		return ResponseEntity.ok(userService.addUser(userDto));

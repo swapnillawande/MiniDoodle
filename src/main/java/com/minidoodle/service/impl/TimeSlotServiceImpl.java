@@ -204,6 +204,20 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 		
 	}
 
+	@Override
+	public List<TimeSlotDto> getAllAvailableTimeSlots() {
+		
+		
+	    logger.info("Getting available time slots");
+
+	    List<TimeSlot> slots = timeSlotRepository.findByStatus(SlotStatus.FREE);
+
+	    return slots.stream()
+	            .map(slot -> modelMapper.map(slot, TimeSlotDto.class))
+	            .toList();
+
+	}
+
 
 
 }
