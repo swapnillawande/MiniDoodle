@@ -36,6 +36,14 @@ public class MeetingController {
 		return ResponseEntity.ok(meetingService.getAllMeetings());
 	}
 	
+	@GetMapping("/organizer/{organizerId}")
+	public ResponseEntity<List<MeetingDto>> getAllMeetingsByOrganizerId(@PathVariable("organizerId") Long organizerId){
+		logger.info("GET ALL MEETING BY ORGANIZER ID API CALLED");
+
+		
+		return ResponseEntity.ok(meetingService.getAllMeetingsByOrganizerId(organizerId));
+	}
+	
 	@GetMapping("/{meetingId}")
 	public ResponseEntity<MeetingDto> getMeetingById(@PathVariable("meetingId") Long meetingId){
 		logger.info("GET MEETING BY ID API CALLED");

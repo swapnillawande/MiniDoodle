@@ -252,4 +252,25 @@ public class MeetingServiceImpl implements MeetingService{
 	    return convertToDto(savedMeeting);
 	}
 
+	@Override
+	public List<MeetingDto> getAllMeetingsByOrganizerId(Long organizerId) {
+
+	    logger.info("Fetching all meetings for organizer ID: " + organizerId);
+
+	    AppUser organizer = userRepository.findById(organizerId)
+	            .orElseThrow(() -> {
+	                logger.error("Organizer not found with ID: " + organizerId);
+	                
+	                return new ResourceNotFoundException("Organizer not found");
+	            });
+
+	    List<Meeting> meetings = meetingRepository.findByOrganizer(organizer);
+
+	    logger.info("Total meetings found: " +meetings.size());
+
+	    return meetings.stream().map(meeting -> modelMapper.map(meeting, MeetingDto.class)).toList();
+	}
+
+	
+	
 }

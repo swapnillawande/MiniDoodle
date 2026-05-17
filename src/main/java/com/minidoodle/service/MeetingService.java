@@ -7,6 +7,8 @@ import com.minidoodle.dto.MeetingDto;
 public interface MeetingService {
 
     List<MeetingDto> getAllMeetings();
+    
+    List<MeetingDto> getAllMeetingsByOrganizerId(Long organizerId);
 
     MeetingDto getMeetingById(Long meetingId);
 
