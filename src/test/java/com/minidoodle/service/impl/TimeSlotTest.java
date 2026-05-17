@@ -26,15 +26,24 @@ public class TimeSlotTest {
 	@Autowired
 	private TimeSlotServiceImpl timeSlotServiceImpl;
 	
+	
+	private UserDto createUser() {
+
+	    UserDto userDto = new UserDto();
+
+	    long time = System.currentTimeMillis();
+
+	    userDto.setUsername("user" + time);
+	    userDto.setEmail("user" + time + "@test.com");
+
+	    return userService.addUser(userDto);
+	}
+	
+	
 	@Test
 	public void testAddTimeSlot() {
 		
-		UserDto userDto = new UserDto();
-		
-		userDto.setUsername("owner");
-		userDto.setEmail("owner@gmail.com");
-		
-		UserDto savedUser = userService.addUser(userDto);
+		UserDto savedUser = createUser();
 		
 		TimeSlotDto timeSlotDto = new TimeSlotDto();
 		
@@ -71,12 +80,8 @@ public class TimeSlotTest {
     public void testUpdateSlotById() {
     	
     	
-		UserDto userDto = new UserDto();
 		
-		userDto.setUsername("owner1");
-		userDto.setEmail("owner1@gmail.com");
-		
-		UserDto savedUser = userService.addUser(userDto);
+		UserDto savedUser = createUser();
 		
 		TimeSlotDto timeSlotDto = new TimeSlotDto();
 		
