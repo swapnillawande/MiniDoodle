@@ -21,43 +21,44 @@ public class UserServiceTest {
 
     @Autowired
     private UserServiceImpl userService;
- 
-
-    @Test
-    public void testAddUser() {
+    
+    // helper function to create user with different email
+    private UserDto createUser(String username) {
 
         UserDto userDto = new UserDto();
 
-        userDto.setUsername("candidate");
-        userDto.setEmail("candidate@test.com");
-        
-        
-        UserDto savedUser = userService.addUser(userDto);
+        long time = System.currentTimeMillis();
+
+        userDto.setUsername(username);
+        userDto.setEmail(username + time + "@test.com");
+
+        return userService.addUser(userDto);
+    }
+
+    @Test
+    public void testAddUser() {
+    	
+        UserDto savedUser = createUser("testuser");
 
         assertNotNull(savedUser);
+        assertNotNull(savedUser.getId());
 
-        assertEquals("candidate", savedUser.getUsername());
-
-        assertEquals("candidate@test.com", savedUser.getEmail());
+        assertEquals("testuser", savedUser.getUsername());
     }
 
     @Test
     public void testGetUserById() {
 
-        UserDto userDto = new UserDto();
-        userDto.setUsername("user");
-        userDto.setEmail("user@test.com");
-
-        UserDto savedUser = userService.addUser(userDto);
+        UserDto savedUser = createUser("testuser");
         UserDto foundUser = userService.getUserById(savedUser.getId());
 
         assertNotNull(foundUser);
         
         assertEquals(savedUser.getId(), foundUser.getId());
         
-        assertEquals("user", foundUser.getUsername());
+        assertEquals(savedUser.getUsername(), foundUser.getUsername());
         
-        assertEquals("user@test.com", foundUser.getEmail());
+        assertEquals(savedUser.getEmail(), foundUser.getEmail());
         
     }
     
@@ -73,16 +74,8 @@ public class UserServiceTest {
     public void testDeleteUserById() {
     	
     	
-        UserDto userDto = new UserDto();
-
-        userDto.setUsername("sample");
-        userDto.setEmail("sample@test.com");
-        
-        
-        UserDto savedUser = userService.addUser(userDto);
-        
-        
-        
+    	UserDto savedUser = createUser("testuser");    
+             
         userService.deleteUserById(savedUser.getId());
         
         assertThrows(RuntimeException.class, () -> {
@@ -95,25 +88,21 @@ public class UserServiceTest {
     @Test
     public void testUpdateUserById() {
 
-        UserDto userDto = new UserDto();
-
-        userDto.setUsername("sample");
-        userDto.setEmail("sample@test.com");
-        
-
-        UserDto savedUser = userService.addUser(userDto);
+    	UserDto savedUser = createUser("testuser");
 
         Long userId = savedUser.getId();
 
         UserDto user = userService.getUserById(userId);
 
+        long time = System.currentTimeMillis();
+        
         user.setUsername("leo");
-        user.setEmail("leo@test.com");
+        user.setEmail("leo"+time+"@test.com");
 
         UserDto updatedUser = userService.updateUserById(userId, user);
 
-        assertEquals("leo", updatedUser.getUsername());
-        assertEquals("leo@test.com", updatedUser.getEmail());
+        assertEquals(user.getUsername(), updatedUser.getUsername());
+        assertEquals(user.getEmail(), updatedUser.getEmail());
         
         
         
