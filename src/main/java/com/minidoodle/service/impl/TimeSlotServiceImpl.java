@@ -59,7 +59,8 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 		
 		return modelMapper.map(timeSlot, TimeSlotDto.class);
 	}
-
+	
+	// add time slot
 	@Override
 	public TimeSlotDto addSlot(TimeSlotDto timeSlotDto) {
 
@@ -98,6 +99,22 @@ public class TimeSlotServiceImpl implements TimeSlotService{
 
 	        timeSlot.setMeeting(meeting);
 	    }
+	    
+	    List<TimeSlot> overlappingSlots =timeSlotRepository.findByOwnerIdAndStartTimeLessThanAndEndTimeGreaterThan(
+	    		
+	                    timeSlotDto.getOwnerId(),
+	                    timeSlotDto.getEndTime(),
+	                    timeSlotDto.getStartTime()
+	                    
+	            );
+
+	    if (!overlappingSlots.isEmpty()) {
+
+	        logger.error("Overlapping slot already exists..");
+
+	        throw new RuntimeException("Slot timing overlaps with existing slot..");
+	    }
+	    
 
 	    TimeSlot savedSlot = timeSlotRepository.save(timeSlot);
 
