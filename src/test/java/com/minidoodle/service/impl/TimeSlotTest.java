@@ -56,8 +56,7 @@ public class TimeSlotTest {
 		
 	}
 	
-	
-	
+
     
     @Test
     public void testGetAllTimeSlots() {
@@ -68,21 +67,50 @@ public class TimeSlotTest {
     	assertNotNull(allAvailableTimeSlots);
     }
 	
+    @Test
+    public void testUpdateSlotById() {
+    	
+    	
+		UserDto userDto = new UserDto();
+		
+		userDto.setUsername("owner1");
+		userDto.setEmail("owner1@gmail.com");
+		
+		UserDto savedUser = userService.addUser(userDto);
+		
+		TimeSlotDto timeSlotDto = new TimeSlotDto();
+		
+	    timeSlotDto.setStartTime(LocalDateTime.of(2026, 5, 26, 10, 0));
 
-	
-	
+	    timeSlotDto.setEndTime(LocalDateTime.of(2026, 5, 26, 11, 0));
+	    
+	    
+	    timeSlotDto.setOwnerId(savedUser.getId());
+	    
+	    
+	    TimeSlotDto addedSlot = timeSlotServiceImpl.addSlot(timeSlotDto);
+	    
+	    Long timeSlotId = addedSlot.getId();
+	    
+	    timeSlotDto.setStartTime(LocalDateTime.of(2026, 5, 25, 10, 0));
+
+	    timeSlotDto.setEndTime(LocalDateTime.of(2026, 5, 25, 11, 0));
+	    
+	    TimeSlotDto updatedTimeSlot = timeSlotServiceImpl.updateSlotById(timeSlotId, timeSlotDto);
+    	
+    	
+	    assertNotNull(updatedTimeSlot);
+	    assertEquals(timeSlotId, updatedTimeSlot.getId());
+	    assertEquals(LocalDateTime.of(2026, 5, 25, 10, 0), updatedTimeSlot.getStartTime());
+	    assertEquals(LocalDateTime.of(2026, 5, 25, 11, 0), updatedTimeSlot.getEndTime());
+    	
+    }
+	  
+    
+    
+    
 	
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
