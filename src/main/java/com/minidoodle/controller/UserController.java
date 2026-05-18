@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.minidoodle.dto.UserDto;
 import com.minidoodle.service.UserService;
 
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/add-user")
-	public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto){
+	public ResponseEntity<UserDto> addUser(@Valid @RequestBody UserDto userDto){
 		logger.info("POST USER API CALLED");
 		return ResponseEntity.ok(userService.addUser(userDto));
 	}

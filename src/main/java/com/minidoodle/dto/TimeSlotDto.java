@@ -2,9 +2,10 @@ package com.minidoodle.dto;
 
 import java.time.LocalDateTime;
 
-import com.minidoodle.entity.AppUser;
-import com.minidoodle.entity.Meeting;
+
 import com.minidoodle.entity.enums.SlotStatus;
+
+import jakarta.validation.constraints.NotNull;
 
 
 
@@ -12,12 +13,15 @@ public class TimeSlotDto {
 
     private Long id;
 
+    @NotNull(message = "Start time is required")
     private LocalDateTime startTime;
-
+    
+    @NotNull(message = "End time is required")
     private LocalDateTime endTime;
 
     private SlotStatus status;
 
+    @NotNull(message = "Owner id is required")
     private Long ownerId;
     
     private Long meetingId;
