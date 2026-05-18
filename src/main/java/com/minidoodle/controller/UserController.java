@@ -64,7 +64,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUserById(@PathVariable("userId") Long userId, @RequestBody UserDto userDto){
+	public ResponseEntity<UserDto> updateUserById(@PathVariable("userId") Long userId, @Valid @RequestBody UserDto userDto){
 		logger.info("UPDATE USER BY ID API CALLED");
 		
 		UserDto updatedUserById = userService.updateUserById(userId, userDto);

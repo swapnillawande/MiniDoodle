@@ -3,20 +3,28 @@ package com.minidoodle.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class MeetingDto {
 
     private Long id;
-
+    
+    @NotBlank(message = "Meeting title is required")
     private String title;
 
+    @NotBlank(message = "Meeting description is required")
     private String description;
 
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
-
+    
+    @NotNull(message = "Organizer id is required")
     private Long organizerId;
 
+    @NotEmpty(message = "At least one participant is required")
     private List<Long> participantIds;
 
     public MeetingDto() {

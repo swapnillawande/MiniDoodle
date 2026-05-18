@@ -18,6 +18,8 @@ import com.minidoodle.dto.TimeSlotDto;
 import com.minidoodle.entity.enums.SlotStatus;
 import com.minidoodle.service.TimeSlotService;
 
+import jakarta.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,7 @@ public class TimeSlotController {
 	private TimeSlotService timeSlotService;
 	
 	@PostMapping("/add-time-slot")
-	public ResponseEntity<TimeSlotDto> addTimeSlot(@RequestBody TimeSlotDto timeSlotDto){
+	public ResponseEntity<TimeSlotDto> addTimeSlot(@Valid @RequestBody TimeSlotDto timeSlotDto){
 		logger.info("POST TIME SLOT API CALLED");
 		
 		TimeSlotDto addedTimeSlot = timeSlotService.addSlot(timeSlotDto);
@@ -67,7 +69,7 @@ public class TimeSlotController {
 	@PutMapping("/{slotId}")
 	public ResponseEntity<TimeSlotDto> updateTimeSlotById(
 			@PathVariable("slotId") Long slotId,
-			@RequestBody TimeSlotDto timeSlotDto
+			@Valid @RequestBody TimeSlotDto timeSlotDto
 			){
 		logger.info("UPDATE TIME SLOT BY ID API CALLED");
 
